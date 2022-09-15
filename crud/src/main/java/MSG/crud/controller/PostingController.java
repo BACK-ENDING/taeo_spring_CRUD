@@ -6,4 +6,10 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class PostingController {
+    private final PostingService postingService;
+
+    @Autowired
+    public PostingController(PostingService postingService) {
+        this.postingService = postingService;
+    }
 }

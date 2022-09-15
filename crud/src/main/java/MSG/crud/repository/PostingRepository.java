@@ -2,6 +2,7 @@ package MSG.crud.repository;
 
 import MSG.crud.domain.Posting;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +11,9 @@ public interface PostingRepository {
 
         Optional<Posting> findByTitle(String title);
 
-        Optional<Posting> findByContent(String content);
+        List<Posting> findByUser(String user);
 
-        Optional<Posting> findByUser(String user);
-
-        Optional<Posting> findByPostId(Integer id);
+        Optional<Posting> findByPostId(Long id);
 
         List<Posting> findAll();
 

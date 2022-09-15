@@ -3,11 +3,11 @@ package MSG.crud.domain;
 public class Posting {
     private String title;
 
-    private Integer postId;
+    private Long postId;
 
     private String content;
 
-    private String user;
+    private String name;
 
     public String getTitle() {
         return title;
@@ -25,19 +25,19 @@ public class Posting {
         this.content = content;
     }
 
-    public String getUser() {
-        return user;
+    public String getName() {
+        return name;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getPostId() {
+    public long getPostId() {
         return postId;
     }
 
-    public void setPostId(int postId) {
+    public void setPostId(long postId) {
         this.postId = postId;
     }
 
