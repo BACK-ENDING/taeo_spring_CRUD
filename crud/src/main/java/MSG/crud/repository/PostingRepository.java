@@ -11,11 +11,13 @@ public interface PostingRepository {
 
         Optional<Posting> findByTitle(String title);
 
-        List<Posting> findByUser(String user);
+        Optional<Posting> findByName(String name);
 
-        Optional<Posting> findByPostId(Long id);
+        Optional<Posting> findByPostId(Long postid);
 
         List<Posting> findAll();
+
+        Optional<Posting> updateByAll();
 
 
 }

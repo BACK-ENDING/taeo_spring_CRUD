@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCPostingRepository implements PostingRepository{
+public class JDBCPostingRepository implements PostingRepository {
 
     private final DataSource dataSource;
 
@@ -23,7 +23,7 @@ public class JDBCPostingRepository implements PostingRepository{
 
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs =null;
+        ResultSet rs = null;
 
         try {
             conn = dataSource.getConnection();
@@ -45,6 +45,130 @@ public class JDBCPostingRepository implements PostingRepository{
                 throw new SQLException("게시물 조회 실패");
             }
             return posting;
+        }
+        catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+        finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+        @Override
+        public Optional<Posting> findByTitle(String title) {
+            String sql = "SELECT * FROM posting WHERE title = ?";
+
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;
+
+            try {
+                    conn = dataSource.getConnection();
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, title);
+
+                rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    Posting posting = new Posting();
+                    posting.setTitle(rs.getString("title"));
+                    return Optional.of(posting);
+                } else {
+                    return Optional.empty();
+                }
+            }
+                catch(Exception e) {
+                    throw new IllegalStateException(e);
+                }
+                finally{
+                    close(conn, pstmt, rs);
+                }
+        }
+
+    @Override
+    public Optional<Posting> findByName(String name) {
+        String sql = "SELECT * FROM posting WHERE name = ?";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Posting posting = new Posting();
+                posting.setName(rs.getString("name"));
+                return Optional.of(posting);
+            } else {
+                return Optional.empty();
+            }
+        }
+            catch(Exception e) {
+                throw new IllegalStateException(e);
+            }
+                finally{
+                close(conn, pstmt, rs);
+            }
+    }
+
+
+    @Override
+    public Optional<Posting> findByPostId(Long postid) {
+        String sql = "SELECT * FROM posting WHERE postid = ?";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, postid);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Posting posting = new Posting();
+                posting.setName(rs.getString("postid"));
+                return Optional.of(posting);
+            } else {
+                return Optional.empty();
+            }
+        }
+        catch(Exception e) {
+            throw new IllegalStateException(e);
+        }
+        finally{
+            close(conn, pstmt, rs);
+        }
+    }
+
+    @Override
+        public List<Posting> findAll(){
+            String sql = "SELECT * FROM Posting";
+
+            Connection conn = null;
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;
+
+            try {
+                conn = dataSource.getConnection();
+                pstmt =conn.prepareStatement(sql);
+
+                rs = pstmt.executeQuery();
+                List<Posting> postings = new ArrayList<>();
+                while(rs.next()) {
+                    Posting posting = new Posting();
+                    posting.setPostId(rs.getLong("Post_id"));
+                    posting.setTitle(rs.getString("Title"));
+                    posting.setContent(rs.getString("content"));
+                    posting.setName(rs.getString("Name"));
+                    postings.add(posting);
+                }
+                return postings;
             }
             catch (Exception e) {
                 throw new IllegalStateException(e);
@@ -54,13 +178,17 @@ public class JDBCPostingRepository implements PostingRepository{
             }
         }
 
-//        @Override
-//        public Optional<Posting> findByTitle(String title) {
-//            String sql = "SELECT * FROM posting WHERE title = ?";
+//    @Override
+//    public Optional<Posting> updateByAll() {
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//        ResultSet rs = null;
 //
-//            Connection conn = null;
-//            PreparedStatement pstmt = null;
+//        try {
+//            conn = pstmt.dataSource.getConnection();
+////            pstmt = conn.prepareStatement(sql);
 //        }
+//    }
 
     private void close(Connection conn, PreparedStatement pstmt, ResultSet rs ) {
         try {
