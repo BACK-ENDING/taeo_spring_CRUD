@@ -13,4 +13,7 @@ public class Posting {
     private String content;
 
     private String name;
+
+    public Posting() {
+    }
 }

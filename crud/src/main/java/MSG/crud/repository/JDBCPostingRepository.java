@@ -132,7 +132,7 @@ public class JDBCPostingRepository implements PostingRepository {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 Posting posting = new Posting();
-                posting.setName(rs.getString("postid"));
+                posting.setName(rs.getString("post_id"));
                 return Optional.of(posting);
             } else {
                 return Optional.empty();
@@ -178,18 +178,64 @@ public class JDBCPostingRepository implements PostingRepository {
             }
         }
 
-//    @Override
-//    public Optional<Posting> updateByAll() {
-//        Connection conn = null;
-//        PreparedStatement pstmt = null;
-//        ResultSet rs = null;
-//
-//        try {
-//            conn = pstmt.dataSource.getConnection();
-////            pstmt = conn.prepareStatement(sql);
-//        }
-//    }
+    @Override
+    public Optional<Posting> updateByAll(String title, String content, String name) {
+        String sql = "UPDATE posting SET title = ?, content = ?, name = ? WHERE post_id = ?";
 
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                Posting posting = new Posting();
+                pstmt.setString(1, posting.getTitle());
+                pstmt.setLong(4, posting.getPostId());
+                pstmt.setString(2, posting.getContent());
+                pstmt.setString(3, posting.getName());
+                return Optional.empty();
+            }
+            else {
+                return Optional.empty();
+            }
+        }
+
+        catch (Exception e){
+            throw new IllegalStateException(e);
+        }
+        finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    public Optional<Posting> deleteByAll(String title, Long post_id, String content, String name) {
+        String sql = "DELETE * FROM WHERE post_id = ?";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        List<Posting> postings= new ArrayList<>();
+        try {
+            conn = dataSource.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, post_id);
+
+            rs = pstmt.executeQuery();
+            return Optional.empty();
+        }
+        catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+
+        finally {
+            close(conn, pstmt, rs);
+        }
+    }
     private void close(Connection conn, PreparedStatement pstmt, ResultSet rs ) {
         try {
             if (rs != null) {

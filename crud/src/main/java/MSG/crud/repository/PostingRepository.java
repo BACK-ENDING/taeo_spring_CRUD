@@ -17,7 +17,9 @@ public interface PostingRepository {
 
         List<Posting> findAll();
 
-        Optional<Posting> updateByAll();
+        Optional<Posting> updateByAll(String title, String content, String name);
+
+        Optional<Posting> deleteByAll(String title, Long post_id, String content, String name);
 
 
 }
