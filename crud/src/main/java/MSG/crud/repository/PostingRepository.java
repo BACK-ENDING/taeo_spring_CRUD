@@ -13,7 +13,7 @@ public interface PostingRepository {
 
         Optional<Posting> findByName(String name);
 
-        Optional<Posting> findByPostId(Long postid);
+        Optional<Posting> findByPostid(Long postid);
 
         List<Posting> findAll();
 

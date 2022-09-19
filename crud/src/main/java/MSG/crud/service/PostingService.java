@@ -16,10 +16,10 @@ public class PostingService {
     }
 
     public long join(Posting posting) {
-        // 같은 이름이 있는 중복 회원은 X
-        validateDuplicatePosting(posting); // 중복 회원 검증
+        // 같은 이름이 있는 중복 제목은 X
+        validateDuplicatePosting(posting); // 중복 제목 검증
         postingRepository.save(posting);
-        return posting.getPostId();
+        return posting.getPostid();
     }
 
     private void validateDuplicatePosting(Posting posting) {
@@ -38,6 +38,6 @@ public class PostingService {
 
     }
     public Optional<Posting> findOne(Long postId) {
-        return postingRepository.findByPostId(postId);
+        return postingRepository.findByPostid(postId);
     }
 }

@@ -71,7 +71,10 @@ public class JDBCPostingRepository implements PostingRepository {
 
                 if (rs.next()) {
                     Posting posting = new Posting();
-                    posting.setTitle(rs.getString("title"));
+                    posting.setPostid(rs.getLong("Postid"));
+                    posting.setTitle(rs.getString("Title"));
+                    posting.setContent(rs.getString("Content"));
+                    posting.setName(rs.getString("Name"));
                     return Optional.of(posting);
                 } else {
                     return Optional.empty();
@@ -101,7 +104,10 @@ public class JDBCPostingRepository implements PostingRepository {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 Posting posting = new Posting();
-                posting.setName(rs.getString("name"));
+                posting.setPostid(rs.getLong("Postid"));
+                posting.setTitle(rs.getString("Title"));
+                posting.setContent(rs.getString("Content"));
+                posting.setName(rs.getString("Name"));
                 return Optional.of(posting);
             } else {
                 return Optional.empty();
@@ -117,7 +123,7 @@ public class JDBCPostingRepository implements PostingRepository {
 
 
     @Override
-    public Optional<Posting> findByPostId(Long postid) {
+    public Optional<Posting> findByPostid(Long postid) {
         String sql = "SELECT * FROM posting WHERE postid = ?";
 
         Connection conn = null;
@@ -132,7 +138,10 @@ public class JDBCPostingRepository implements PostingRepository {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 Posting posting = new Posting();
-                posting.setName(rs.getString("post_id"));
+                posting.setPostid(rs.getLong("Postid"));
+                posting.setTitle(rs.getString("Title"));
+                posting.setContent(rs.getString("Content"));
+                posting.setName(rs.getString("Name"));
                 return Optional.of(posting);
             } else {
                 return Optional.empty();
@@ -162,9 +171,9 @@ public class JDBCPostingRepository implements PostingRepository {
                 List<Posting> postings = new ArrayList<>();
                 while(rs.next()) {
                     Posting posting = new Posting();
-                    posting.setPostId(rs.getLong("Post_id"));
+                    posting.setPostid(rs.getLong("Postid"));
                     posting.setTitle(rs.getString("Title"));
-                    posting.setContent(rs.getString("content"));
+                    posting.setContent(rs.getString("Content"));
                     posting.setName(rs.getString("Name"));
                     postings.add(posting);
                 }
@@ -180,7 +189,7 @@ public class JDBCPostingRepository implements PostingRepository {
 
     @Override
     public Optional<Posting> updateByAll(String title, String content, String name) {
-        String sql = "UPDATE posting SET title = ?, content = ?, name = ? WHERE post_id = ?";
+        String sql = "UPDATE posting SET title = ?, content = ?, name = ? WHERE postid = ?";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -194,7 +203,7 @@ public class JDBCPostingRepository implements PostingRepository {
             if(rs.next()) {
                 Posting posting = new Posting();
                 pstmt.setString(1, posting.getTitle());
-                pstmt.setLong(4, posting.getPostId());
+                pstmt.setLong(4, posting.getPostid());
                 pstmt.setString(2, posting.getContent());
                 pstmt.setString(3, posting.getName());
                 return Optional.empty();
@@ -212,8 +221,8 @@ public class JDBCPostingRepository implements PostingRepository {
         }
     }
 
-    public Optional<Posting> deleteByAll(String title, Long post_id, String content, String name) {
-        String sql = "DELETE * FROM WHERE post_id = ?";
+    public Optional<Posting> deleteByAll(String title, Long postid, String content, String name) {
+        String sql = "DELETE * FROM WHERE postid = ?";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -223,7 +232,7 @@ public class JDBCPostingRepository implements PostingRepository {
         try {
             conn = dataSource.getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, post_id);
+            pstmt.setLong(1, postid);
 
             rs = pstmt.executeQuery();
             return Optional.empty();
